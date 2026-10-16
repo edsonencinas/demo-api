@@ -1,0 +1,46 @@
+substitutions:
+  _REGION: us-central1
+  _REPO: apps
+  _SERVICE_NAME: demo-api-dev
+  _APP_ENV: dev
+
+steps:
+  - id: test
+    name: python:3.12-slim
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        pip install --quiet -r requirements.txt pytest
+        pytest -q
+
+  - id: build
+    name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - -t
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/demo-api:$SHORT_SHA
+      - .
+
+  - id: push
+    name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/demo-api:$SHORT_SHA
+
+  - id: deploy
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - ${_SERVICE_NAME}
+      - --image=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/demo-api:$SHORT_SHA
+      - --region=${_REGION}
+      - --service-account=run-app-sa@$PROJECT_ID.iam.gserviceaccount.com
+      - --set-env-vars=APP_ENV=${_APP_ENV},APP_VERSION=$SHORT_SHA
+      - --allow-unauthenticated
+      - --max-instances=2
+
+options:
+  logging: CLOUD_LOGGING_ONLY

@@ -10,4 +10,4 @@ def test_items():
     client = app.test_client()
     res = client.get("/api/items")
     assert res.status_code == 200
-    assert len(res.get_json()) == 2
+    assert len(res.get_json()) == 3 # was 2, this will now fail

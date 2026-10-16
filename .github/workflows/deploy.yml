@@ -1,0 +1,45 @@
+name: Deploy (GitHub Actions)
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  REGION: us-central1
+  PROJECT_ID: YOUR_PROJECT_ID
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt pytest && pytest -q
+
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+
+      - uses: google-github-actions/setup-gcloud@v2
+
+      - name: Build and push
+        run: |
+          gcloud auth configure-docker $REGION-docker.pkg.dev --quiet
+          IMAGE=$REGION-docker.pkg.dev/$PROJECT_ID/apps/demo-api:${{ github.sha }}
+          docker build -t $IMAGE .
+          docker push $IMAGE
+
+      - name: Deploy
+        run: |
+          gcloud run deploy demo-api-gh \
+            --image=$REGION-docker.pkg.dev/$PROJECT_ID/apps/demo-api:${{ github.sha }} \
+            --region=$REGION \
+            --service-account=run-app-sa@$PROJECT_ID.iam.gserviceaccount.com \
+            --allow-unauthenticated

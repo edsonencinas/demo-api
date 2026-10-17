@@ -43,4 +43,4 @@ jobs:
             --region=$REGION \
             --service-account=run-app-sa@$PROJECT_ID.iam.gserviceaccount.com \
             --allow-unauthenticated
-EOF
+

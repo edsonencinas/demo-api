@@ -42,4 +42,5 @@ jobs:
             --image=$REGION-docker.pkg.dev/$PROJECT_ID/apps/demo-api:${{ github.sha }} \
             --region=$REGION \
             --service-account=run-app-sa@$PROJECT_ID.iam.gserviceaccount.com \
-            --allow-unauthenticate
+            --allow-unauthenticated
+EOF

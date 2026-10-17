@@ -8,7 +8,7 @@ ITEMS = [{"id": 1, "name": "alpha"}, {"id": 2, "name": "beta"}]
 @app.get("/")
 def index():
     return jsonify(
-        message="Hello thre, from Cloud Run!!",
+        message="Hello there, from Cloud Run!!",
         env=os.getenv("APP_ENV", "local"),
         version=os.getenv("APP_VERSION", "dev"),
     )

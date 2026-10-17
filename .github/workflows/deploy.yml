@@ -37,7 +37,10 @@ jobs:
           docker push $IMAGE  
 
       - name: Who am I
-        run: gcloud auth list
+        run: |
+          gcloud auth list
+          gcloud config list
+          gcloud projects get-iam-policy cicd-portfolio-edson --flatten="bindings[].members" --filter="bindings.members:serviceAccount" --format="value(bindings.members)" | sort -u
 
       - name: Deploy
         run: |

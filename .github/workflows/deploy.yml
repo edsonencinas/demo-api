@@ -37,10 +37,7 @@ jobs:
           docker push $IMAGE  
 
       - name: Who am I
-        run: |
-          gcloud auth list
-          gcloud config list
-          gcloud projects get-iam-policy cicd-portfolio-edson --flatten="bindings[].members" --filter="bindings.members:serviceAccount" --format="value(bindings.members)" | sort -u
+        run: gcloud auth list --format="value(account)" | sed 's/./& /g'
 
       - name: Deploy
         run: |
@@ -48,4 +45,4 @@ jobs:
             --image=$REGION-docker.pkg.dev/$PROJECT_ID/apps/demo-api:${{ github.sha }} \
             --region=$REGION \
             --service-account=run-app-sa@$PROJECT_ID.iam.gserviceaccount.com \
-            --allow-unauthenticated
+            --allow-unauthenticate

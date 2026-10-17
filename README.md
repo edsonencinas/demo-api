@@ -89,8 +89,6 @@ Key decisions:
 
 ## Setup summary
 
-> Full commands are in the build guide. This is the order of operations.
-
 1. Create a GCP project, link billing and set a budget alert.
 2. Enable APIs: Cloud Run, Cloud Build, Artifact Registry, IAM, IAM Credentials, Secret Manager.
 3. Create the Artifact Registry Docker repository `apps` in `us-central1`.
@@ -153,12 +151,10 @@ To prove the pipeline blocks bad code, I changed a test assertion so it failed a
 | `gcloud` errors such as "REPOSITORY must be specified" or "SERVICE_ACCOUNT: Must be specified" | Shell variables were empty after a new terminal session | Re-exported variables and persisted them in `~/.bashrc` |
 | Trigger existed but no build ran | Build had never been fired, or the history was filtered to the wrong region | Ran the trigger manually, then confirmed push events fire it |
 | `tag 'v1.0.0' already exists` | Tag had been created earlier | Checked `git ls-remote --tags origin`, then reused or re-created the tag |
-| WIF failures | Placeholder values (`YOUR_USER`, `YOUR_PROJECT_ID`) pasted literally | Replaced with real values and searched with `grep -rn "YOUR_" .` |
 | `PERMISSION_DENIED` on Artifact Registry push and Cloud Run deploy from GitHub Actions | IAM bindings were created while variables were empty, plus IAM propagation delay | Re-granted roles with explicit values, waited a few minutes, re-ran the workflow |
 
 Lessons learned:
 
-- Placeholders (`YOUR_USER`) are not shell variables. Nothing fills them in.
 - IAM changes can take a few minutes to take effect.
 - Cloud Shell sessions reset environment variables, so scripts and docs should not rely on them.
 - Secrets are masked in GitHub logs, which makes identity problems harder to debug.
@@ -166,17 +162,6 @@ Lessons learned:
 ## Cost
 
 Everything used here sits in or near the free tier: Cloud Run scales to zero, Cloud Build includes free build minutes, and Artifact Registry has a small free storage allowance. A billing budget alert is configured on the project.
-
-## Cleanup
-
-```bash
-gcloud run services delete demo-api-dev  --region=us-central1 -q
-gcloud run services delete demo-api-prod --region=us-central1 -q
-gcloud run services delete demo-api-gh   --region=us-central1 -q
-gcloud artifacts repositories delete apps --location=us-central1 -q
-```
-
-Or delete the whole project with `gcloud projects delete <PROJECT_ID>`.
 
 ## What I would improve
 

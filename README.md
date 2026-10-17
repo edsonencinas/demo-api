@@ -29,8 +29,6 @@ flowchart LR
     AR --> RG[Cloud Run<br/>demo-api-gh]
 ```
 
-> Replace or supplement this with a draw.io diagram export (`docs/architecture.png`) if you prefer.
-
 ## Deployment strategy
 
 | Event | Pipeline | Target service | Approval |

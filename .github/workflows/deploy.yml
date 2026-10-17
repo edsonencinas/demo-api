@@ -9,7 +9,7 @@ permissions:
 
 env:
   REGION: us-central1
-  PROJECT_ID: YOUR_PROJECT_ID
+  PROJECT_ID: cicd-portfolio-edson
 
 jobs:
   deploy:

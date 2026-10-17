@@ -12,8 +12,6 @@ env:
   PROJECT_ID: cicd-portfolio-edson
 
 jobs:
-  -name: Who am I
-  run: gcloud auth list
   deploy:
     runs-on: ubuntu-latest
     steps:
@@ -36,7 +34,10 @@ jobs:
           gcloud auth configure-docker $REGION-docker.pkg.dev --quiet
           IMAGE=$REGION-docker.pkg.dev/$PROJECT_ID/apps/demo-api:${{ github.sha }}
           docker build -t $IMAGE .
-          docker push $IMAGE
+          docker push $IMAGE  
+
+      - name: Who am I
+        run: gcloud auth list
 
       - name: Deploy
         run: |

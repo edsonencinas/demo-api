@@ -36,9 +36,6 @@ jobs:
           docker build -t $IMAGE .
           docker push $IMAGE  
 
-      - name: Who am I
-        run: gcloud auth list --format="value(account)" | sed 's/./& /g'
-
       - name: Deploy
         run: |
           gcloud run deploy demo-api-gh \

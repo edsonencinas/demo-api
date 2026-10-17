@@ -12,6 +12,8 @@ env:
   PROJECT_ID: cicd-portfolio-edson
 
 jobs:
+  -name: Who am I
+  run: gcloud auth list
   deploy:
     runs-on: ubuntu-latest
     steps:

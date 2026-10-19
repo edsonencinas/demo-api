@@ -131,13 +131,20 @@ gcloud run services list --region=us-central1
 
 ### Screenshots
 
-| | |
-|---|---|
-| Green Cloud Build run | `docs/cloudbuild-success.png` |
-| Prod approval screen | `docs/prod-approval.png` |
-| Failed test stops the pipeline before deploy | `docs/failed-test.png` |
-| Green GitHub Actions run (no key file in auth step) | `docs/github-actions-success.png` |
-| `gcloud run services list` output | `docs/services-list.png` |
+**Green Cloud Build run**
+![Green Cloud Build run](docs/cloudbuild-success.png)
+
+**Prod approval screen**
+![Prod approval screen](docs/prod-approval.png)
+
+**Failed test stops the pipeline before deploy**
+![Failed test build](docs/failed-test.png)
+
+**Green GitHub Actions run (keyless auth)**
+![Green GitHub Actions run](docs/github-actions-success.png)
+
+**Cloud Run services**
+![Cloud Run services](docs/services-list.png)
 
 ## Guardrail test
 
